@@ -1,29 +1,34 @@
 # Arc Unified Balance Checkout
 
-USDC'niz **Ethereum Sepolia**, **Base Sepolia** veya **Solana Devnet**'te olsa bile **Arc Testnet**'te tek tıkla ödeme yapın.
+Pay on Arc Testnet with a single click — even if your USDC is on Ethereum Sepolia, Base Sepolia, or Solana Devnet.
 
-Stack: **Next.js + Wagmi + Circle App Kit Unified Balance**
+**Stack:** Next.js + Wagmi + Circle App Kit Unified Balance  
+**Wallets:** Rabby (EVM) + Phantom (Solana)
 
-Cüzdanlar: **Rabby** (EVM) + **Phantom** (Solana)
+---
 
-## Ne yapar?
+## What It Does
 
-1. **Rabby** ile EVM cüzdanını bağlayın (Ethereum Sepolia / Base Sepolia / Arc Testnet)
-2. **Phantom** ile Solana Devnet cüzdanını bağlayın
-3. Her iki cüzdandan **Unified Balance**'a USDC yatırın
-4. App Kit, Rabby ve Phantom kaynaklarından otomatik USDC çeker
-5. **Arc Testnet**'te tek tıkla checkout tamamlayın
+- Connect your EVM wallet via **Rabby** (Ethereum Sepolia / Base Sepolia / Arc Testnet)
+- Connect your Solana wallet via **Phantom** (Devnet mode)
+- Deposit USDC from either wallet into **Unified Balance**
+- Circle App Kit automatically pulls USDC from Rabby and Phantom sources
+- Complete checkout on Arc Testnet in a single click
 
-## Gereksinimler
+---
+
+## Prerequisites
 
 - Node.js 22+
-- [Rabby](https://rabby.io/) tarayıcı eklentisi
-- [Phantom](https://phantom.app/) tarayıcı eklentisi (Devnet modu)
+- Rabby browser extension
+- Phantom browser extension (Devnet mode enabled)
 - Testnet USDC: [Circle Faucet](https://faucet.circle.com)
-- Base/Ethereum Sepolia için testnet ETH (gas)
-- Solana Devnet için SOL
+- Testnet ETH for gas (Base / Ethereum Sepolia)
+- SOL for gas (Solana Devnet)
 
-## Kurulum
+---
+
+## Setup
 
 ```bash
 cd ~/Projects/arc-unified-checkout
@@ -31,43 +36,92 @@ npm install
 npm run dev
 ```
 
-Tarayıcıda `http://localhost:3000` açın.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Kullanım akışı
+---
 
-| Adım | Aksiyon |
-|------|---------|
-| 1 | Rabby ve Phantom cüzdanlarını bağla |
-| 2 | Unified Balance bakiyesini yenile |
-| 3 | Rabby (ETH/Base) veya Phantom (Solana) ile yatır |
-| 4 | Ürün seç, alıcı Arc adresi gir, öde |
+## Usage Flow
 
-## Arc Testnet
+| Step | Action |
+|------|--------|
+| 1 | Connect Rabby and Phantom wallets |
+| 2 | Refresh your Unified Balance |
+| 3 | Deposit USDC via Rabby (ETH/Base) or Phantom (Solana) |
+| 4 | Select a product, enter recipient Arc address, and pay |
 
-| Alan | Değer |
-|------|-------|
+---
+
+## Arc Testnet Details
+
+| Field | Value |
+|-------|-------|
 | Chain ID | `5042002` |
 | RPC | `https://rpc.testnet.arc.network` |
-| Gas token | USDC (18 decimals) |
-| Explorer | https://testnet.arcscan.app |
+| Gas Token | USDC (18 decimals) |
+| Explorer | [testnet.arcscan.app](https://testnet.arcscan.app) |
 
-## Komutlar
+---
+
+## Commands
 
 ```bash
-npm run dev        # Geliştirme sunucusu
+npm run dev        # Start development server
 npm run build      # Production build
-npm run start      # Production sunucu
-npm run typecheck  # TypeScript kontrolü
+npm run start      # Start production server
+npm run typecheck  # TypeScript type check
 ```
 
-## Dokümantasyon
+---
 
-- [Unified Balance](https://docs.arc.io/app-kit/unified-balance)
-- [Deposit & Spend Quickstart](https://docs.arc.io/app-kit/quickstarts/unified-balance-deposit-and-spend)
-- [Arc Builder AI Guide](./ARC_BUILDER_AI_GUIDE.md)
+## Circle Products Used
 
-## Notlar
+- **USDC** — primary stablecoin rail for all payments
+- **Circle App Kit (Unified Balance)** — aggregates USDC across EVM and Solana wallets into a single spendable balance
+- **CCTP / Bridge Kit** — powers cross-chain USDC movement under the hood
 
-- Bu uygulama **yalnızca testnet** içindir. Gerçek fon kullanmayın.
-- Arc'ta gas **USDC** ile ödenir (ETH değil).
-- Unified Balance, Rabby ↔ Phantom arası cross-chain USDC transferini App Kit üzerinden yönetir.
+---
+
+## Architecture
+
+```
+User
+ ├── Rabby Wallet (Ethereum Sepolia / Base Sepolia / Arc Testnet)
+ └── Phantom Wallet (Solana Devnet)
+        │
+        ▼
+Circle App Kit — Unified Balance
+        │
+        ▼
+Arc Testnet — Single-click USDC Checkout
+```
+
+---
+
+## Circle Product Feedback
+
+**Why we chose these products:**  
+Unified Balance solves a real UX problem — users shouldn't need to bridge manually before paying. Circle App Kit made it possible to abstract away multi-chain complexity into a single checkout experience.
+
+**What worked well:**  
+- App Kit's Unified Balance API was straightforward to integrate with Wagmi and Phantom adapters
+- USDC as the gas token on Arc removes the need to manage a separate native token, which simplifies the UX significantly
+
+**What could be improved:**  
+- Better error messages when wallet chain doesn't match expected network
+- More detailed logging in the Unified Balance deposit flow for debugging
+
+---
+
+## Documentation
+
+- [Unified Balance](https://developers.circle.com/w3s/docs/unified-balance)
+- [Deposit & Spend Quickstart](https://developers.circle.com/w3s/docs/deposit-and-spend)
+- [Arc Builder AI Guide](https://docs.arc.network)
+
+---
+
+## Notes
+
+> This application is for **testnet purposes only**. Do not use real funds.  
+> Gas on Arc is paid in USDC, not ETH.  
+> Unified Balance manages cross-chain USDC transfers between Rabby and Phantom via Circle App Kit.
