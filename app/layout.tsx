@@ -3,7 +3,7 @@ import { Providers } from './providers'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Arc Unified Balance Checkout',
+  title: 'SwiftPay',
   description:
     'USDC Ethereum, Base veya Solana üzerinde olsa bile Arc Testnet\'te tek tıkla ödeme — Circle App Kit Unified Balance',
 }
