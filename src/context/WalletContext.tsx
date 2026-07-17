@@ -9,8 +9,11 @@ import {
   type ReactNode,
 } from 'react'
 import { resolveChainIdentifier } from '@circle-fin/adapter-viem-v2'
+import type { SpendParams } from '@circle-fin/app-kit'
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import type { DepositChain } from '@/config/checkout'
+
+type SpendParamsWithFrom = Extract<SpendParams, { from: unknown }>
 import { parseUsdcAmount } from '@/config/balance'
 import { kit } from '@/lib/appKit'
 import {
@@ -362,6 +365,12 @@ export function WalletProvider({ children }: { children: ReactNode }) {
           await waitForConfirmation(sources, required)
         }
 
+        const arcResolved = resolveChainIdentifier('Arc_Testnet')
+        if (arcResolved.type !== 'evm') {
+          throw new Error('Arc Testnet geçerli bir EVM zinciri değil')
+        }
+        await activeEvmAdapter.ensureChain(arcResolved)
+
         // Recompute confirmed balance after any wait
         const refreshed = await fetchUnifiedBalance(sources)
         const refreshedConfirmed = parseUsdcAmount(refreshed?.totalConfirmedBalance)
@@ -376,17 +385,61 @@ export function WalletProvider({ children }: { children: ReactNode }) {
           return
         }
 
-        const result = await kit.unifiedBalance.spend({
+        const baseSpendParams: SpendParamsWithFrom = {
           amount,
           token: 'USDC',
-          from: sources,
+          from: sources as SpendParamsWithFrom['from'],
           to: {
             adapter: activeEvmAdapter,
-            chain: 'Arc_Testnet',
+            chain: 'Arc_Testnet' as const,
             recipientAddress,
+          },
+        }
+
+        const tryEstimate = async (useForwarder: boolean) => {
+          const params: SpendParams = {
+            ...baseSpendParams,
+            to: {
+              ...baseSpendParams.to,
+              useForwarder,
+            },
+          }
+          return kit.unifiedBalance.estimateSpend(params)
+        }
+
+        setStatusMessage('Ödeme maliyeti hesaplanıyor...')
+        let spendParams: SpendParamsWithFrom = {
+          ...baseSpendParams,
+          to: {
+            ...baseSpendParams.to,
             useForwarder: true,
           },
-        })
+        }
+
+        try {
+          const estimate = await tryEstimate(true)
+          console.debug('[payOnArc] spend estimate (forwarder)', estimate)
+          setDebug((d: any) => ({ ...d, estimate }))
+        } catch (error) {
+          const msg = error instanceof Error ? error.message : String(error)
+          if (msg.toLowerCase().includes('insufficient')) {
+            setStatusMessage('Forwarder maliyeti fazla olabilir; doğrudan Arc işlemi deneniyor...')
+            spendParams = {
+              ...baseSpendParams,
+              to: {
+                ...baseSpendParams.to,
+                useForwarder: false,
+              },
+            }
+            const fallbackEstimate = await tryEstimate(false)
+            console.debug('[payOnArc] spend estimate (direct)', fallbackEstimate)
+            setDebug((d: any) => ({ ...d, estimate: fallbackEstimate, forwarderFallback: true }))
+          } else {
+            throw error
+          }
+        }
+
+        const result = await kit.unifiedBalance.spend(spendParams)
 
         setSuccess('Arc Testnet ödemesi tamamlandı', {
           txHash: result.txHash,
@@ -466,16 +519,23 @@ export function WalletProvider({ children }: { children: ReactNode }) {
           return
         }
 
-        const result = await kit.unifiedBalance.spend({
+        const spendParams: SpendParamsWithFrom = {
           amount,
           token: 'USDC',
-          from: [{ adapter: activeEvmAdapter }],
+          from: [{ adapter: activeEvmAdapter }] as SpendParamsWithFrom['from'],
           to: {
             adapter: solanaAdapter,
-            chain: 'Solana_Devnet',
+            chain: 'Solana_Devnet' as const,
             recipientAddress: solanaRecipient,
           },
-        })
+        }
+
+        setStatusMessage('Transfer maliyeti hesaplanıyor...')
+        const estimate = await kit.unifiedBalance.estimateSpend(spendParams)
+        console.debug('[transferArcToSolana] spend estimate', estimate)
+        setDebug((d: any) => ({ ...d, estimate }))
+
+        const result = await kit.unifiedBalance.spend(spendParams)
 
         setSuccess('Arc → Solana transferi başlatıldı', {
           txHash: result.txHash,
