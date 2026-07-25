@@ -19,7 +19,7 @@ export function StatusBanner() {
           target="_blank"
           rel="noreferrer"
         >
-          İşlemi explorer&apos;da görüntüle
+          View transaction on explorer
         </a>
       )}
     </div>
