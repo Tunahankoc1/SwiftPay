@@ -9,19 +9,19 @@ export const DEMO_ITEMS: CheckoutItem[] = [
   {
     id: 'starter',
     name: 'Arc Starter Kit',
-    description: 'Testnet demo lisansı — Unified Balance ile ödeme',
+    description: 'Testnet demo license — pay with Unified Balance',
     price: '1.00',
   },
   {
     id: 'pro',
     name: 'Arc Builder Pro',
-    description: 'Geliştirici araçları paketi — cross-chain USDC checkout',
+    description: 'Developer tools bundle — cross-chain USDC checkout',
     price: '2.50',
   },
   {
     id: 'team',
     name: 'Arc Team Bundle',
-    description: '5 kullanıcılık ekip paketi',
+    description: '5-user team bundle',
     price: '5.00',
   },
 ]
