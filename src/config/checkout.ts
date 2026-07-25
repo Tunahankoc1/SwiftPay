@@ -44,16 +44,16 @@ export const DEPOSIT_CHAINS: Record<
   Ethereum_Sepolia: {
     label: 'Ethereum Sepolia',
     wallet: 'rabby',
-    hint: 'Rabby ile Ethereum Sepolia USDC yatırın',
+    hint: 'Deposit Ethereum Sepolia USDC with Rabby',
   },
   Base_Sepolia: {
     label: 'Base Sepolia',
     wallet: 'rabby',
-    hint: 'Rabby ile Base Sepolia USDC yatırın',
+    hint: 'Deposit Base Sepolia USDC with Rabby',
   },
   Solana_Devnet: {
     label: 'Solana Devnet',
     wallet: 'phantom',
-    hint: 'Phantom ile Solana Devnet USDC yatırın',
+    hint: 'Deposit Solana Devnet USDC with Phantom',
   },
 }
