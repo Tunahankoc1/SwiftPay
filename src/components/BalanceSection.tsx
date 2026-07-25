@@ -37,18 +37,18 @@ export function BalanceSection() {
       <div className="panel-header">
         <h2>2. Unified Balance</h2>
         <p>
-          Rabby ve Phantom&apos;daki USDC yatırımları tek havuzda birleşir.
-          Onay beklerken bakiye 1 sn aralıkla otomatik güncellenir.
+          USDC deposits from Rabby and Phantom are combined into a single pool.
+          Balance updates automatically every 1s while awaiting confirmation.
         </p>
       </div>
 
       <div className="balance-card">
         <div className="balance-row">
-          <span>Onaylanmış</span>
+          <span>Confirmed</span>
           <strong>{balance?.totalConfirmedBalance ?? '—'} USDC</strong>
         </div>
         <div className="balance-row pending">
-          <span>Bekleyen</span>
+          <span>Pending</span>
           <strong>{balance?.totalPendingBalance ?? '—'} USDC</strong>
         </div>
       </div>
@@ -59,7 +59,7 @@ export function BalanceSection() {
 
       {pending > 0 && !isConfirming && (
         <p className="hint confirming-hint">
-          Bekleyen bakiye onaylanıyor — otomatik kontrol aktif (1 sn).
+          Pending balance confirming — auto-check active (1s).
         </p>
       )}
 
@@ -69,7 +69,7 @@ export function BalanceSection() {
         onClick={() => void refreshBalance()}
         disabled={!canRefresh || isLoading || isConfirming}
       >
-        Bakiyeyi yenile
+        Refresh Balance
       </button>
     </section>
   )
@@ -93,10 +93,9 @@ export function DepositSection() {
   return (
     <section className="panel">
       <div className="panel-header">
-        <h2>3. Unified Balance&apos;a yatır</h2>
+        <h2>3. Deposit to Unified Balance</h2>
         <p>
-          Yatırım sonrası onay otomatik takip edilir — manuel yenilemeye gerek
-          kalmadan checkout için hazır olur.
+         After deposit, confirmation is tracked automatically — ready for checkout without manual refresh.
         </p>
       </div>
 
@@ -115,7 +114,7 @@ export function DepositSection() {
                 </span>
                 <strong>{meta.label}</strong>
               </div>
-              <label htmlFor={`amount-${chainId}`}>Miktar</label>
+              <label htmlFor={`amount-${chainId}`}>Amount</label>
               <div className="input-row">
                 <input
                   id={`amount-${chainId}`}
@@ -139,7 +138,7 @@ export function DepositSection() {
                 onClick={() => void deposit(chainId, amounts[chainId])}
                 disabled={disabled}
               >
-                Yatır ve onayı bekle
+                Deposit and await confirmation
               </button>
             </div>
           )
