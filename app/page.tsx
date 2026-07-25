@@ -12,9 +12,9 @@ export default function HomePage() {
           <p className="eyebrow">Arc Testnet · Unified Balance · Next.js + Wagmi</p>
           <h1>SwiftPay</h1>
           <p className="subtitle">
-            USDC&apos;niz Ethereum Sepolia, Base Sepolia veya Solana Devnet&apos;te
-            olsa bile Arc Testnet&apos;te tek tıkla ödeme yapın. Rabby (EVM) ve
-            Phantom (Solana) ile Circle App Kit Unified Balance.
+            Pay on Arc Testnet with a single click — even if your USDC is on
+            Ethereum Sepolia, Base Sepolia, or Solana Devnet. Powered by Rabby (EVM),
+            Phantom (Solana), and Circle App Kit Unified Balance.
           </p>
         </div>
       </header>
