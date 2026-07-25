@@ -1,9 +1,7 @@
 'use client'
-
 import { shortenAddress } from '@/lib/evmWallet'
 import { useWallet } from '@/context/WalletContext'
 import { ARC_TESTNET } from '@/config/checkout'
-
 export function WalletSection() {
   const {
     evmAddress,
@@ -14,20 +12,17 @@ export function WalletSection() {
     disconnectPhantom,
     status,
   } = useWallet()
-
   const isLoading = status === 'loading'
-
   return (
     <section className="panel">
       <div className="panel-header">
-        <h2>1. Cüzdanları bağla</h2>
+        <h2>1. Connect Wallets</h2>
         <p>
-          Rabby (EVM) ve Phantom (Solana) cüzdanlarını bağlayın. USDC&apos;niz
-          Ethereum Sepolia, Base Sepolia veya Solana Devnet&apos;te olsa bile Arc
-          Testnet&apos;te tek tıkla ödeyebilirsiniz.
+          Connect your Rabby (EVM) and Phantom (Solana) wallets. Pay on Arc
+          Testnet with a single click — even if your USDC is on
+          Ethereum Sepolia, Base Sepolia, or Solana Devnet.
         </p>
       </div>
-
       <div className="wallet-grid">
         <div className="wallet-card">
           <div className="wallet-card-top">
@@ -43,7 +38,7 @@ export function WalletSection() {
                 onClick={disconnectRabby}
                 disabled={isLoading}
               >
-                Bağlantıyı kes
+                Disconnect
               </button>
             </>
           ) : (
@@ -53,14 +48,13 @@ export function WalletSection() {
               onClick={() => void connectRabby()}
               disabled={isLoading}
             >
-              Rabby bağla
+              Connect Rabby
             </button>
           )}
           <p className="hint">
-            Ethereum Sepolia, Base Sepolia ve Arc Testnet ağlarını ekleyin.
+            Add Ethereum Sepolia, Base Sepolia, and Arc Testnet networks.
           </p>
         </div>
-
         <div className="wallet-card">
           <div className="wallet-card-top">
             <span className="badge">Solana</span>
@@ -75,7 +69,7 @@ export function WalletSection() {
                 onClick={disconnectPhantom}
                 disabled={isLoading}
               >
-                Bağlantıyı kes
+                Disconnect
               </button>
             </>
           ) : (
@@ -85,32 +79,28 @@ export function WalletSection() {
               onClick={() => void connectPhantom()}
               disabled={isLoading}
             >
-              Phantom bağla
+              Connect Phantom
             </button>
           )}
-          <p className="hint">Phantom Devnet modunda olmalı.</p>
+          <p className="hint">Phantom must be in Devnet mode.</p>
         </div>
       </div>
-
       <div className="info-box">
-        <strong>Cross-chain akış (Rabby ↔ Phantom)</strong>
+        <strong>Cross-chain flow (Rabby ↔ Phantom)</strong>
         <ul>
           <li>
-            <strong>Rabby → Unified Balance:</strong> Ethereum Sepolia veya Base
-            Sepolia USDC yatırın
+            <strong>Rabby → Unified Balance:</strong> Deposit USDC from Ethereum Sepolia or Base Sepolia
           </li>
           <li>
-            <strong>Phantom → Unified Balance:</strong> Solana Devnet USDC yatırın
+            <strong>Phantom → Unified Balance:</strong> Deposit USDC from Solana Devnet
           </li>
           <li>
-            <strong>Checkout:</strong> App Kit, Rabby ve Phantom kaynaklarından
-            otomatik USDC çeker ve Arc Testnet&apos;te öder
+            <strong>Checkout:</strong> App Kit automatically pulls USDC from Rabby and Phantom sources and pays on Arc Testnet
           </li>
         </ul>
       </div>
-
       <div className="info-box">
-        <strong>Testnet hazırlığı (ücretsiz)</strong>
+        <strong>Testnet setup (free)</strong>
         <ul>
           <li>
             <a href={ARC_TESTNET.faucetUrl} target="_blank" rel="noreferrer">
@@ -118,8 +108,8 @@ export function WalletSection() {
             </a>{' '}
             — Ethereum Sepolia, Base Sepolia, Solana Devnet USDC
           </li>
-          <li>Base/Ethereum Sepolia için testnet ETH (gas) — public faucet</li>
-          <li>Solana Devnet için SOL — Solana faucet</li>
+          <li>Testnet ETH for gas (Base/Ethereum Sepolia) — public faucet</li>
+          <li>SOL for Solana Devnet — Solana faucet</li>
           <li>
             Arc Testnet: Chain ID {ARC_TESTNET.chainId}, gas token USDC
           </li>
