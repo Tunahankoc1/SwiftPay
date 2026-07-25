@@ -29,8 +29,8 @@ export function CheckoutSection() {
       <div className="panel-header">
         <h2>4. Arc Checkout</h2>
         <p>
-          USDC&apos;niz Rabby (Ethereum/Base) veya Phantom (Solana)&apos;da olsa
-          bile Unified Balance Arc Testnet&apos;te tek tıkla ödeme yapar.
+          Your USDC from Rabby (Ethereum/Base) or Phantom (Solana) is
+          automatically pulled by Unified Balance for one-click payment on Arc Testnet.
         </p>
       </div>
 
@@ -51,7 +51,7 @@ export function CheckoutSection() {
 
       <div className="checkout-summary">
         <div className="summary-row">
-          <span>Seçilen ürün</span>
+          <span>Selected product</span>
           <strong>{selectedItem.name}</strong>
         </div>
         <div className="summary-row total">
@@ -60,7 +60,7 @@ export function CheckoutSection() {
         </div>
       </div>
 
-      <label htmlFor="merchant-address">Satıcı / alıcı Arc adresi</label>
+      <label htmlFor="merchant-address">Merchant / recipient Arc address</label>
       <input
         id="merchant-address"
         type="text"
@@ -70,20 +70,19 @@ export function CheckoutSection() {
         disabled={isLoading}
       />
       <p className="hint">
-        Test için kendi Arc Testnet adresinizi veya başka bir test cüzdanını
-        girebilirsiniz.
+        You can enter your own Arc Testnet address or another test wallet
+        for testing purposes.
       </p>
 
       {!hasEnoughBalance && balance && !willAutoWait && (
         <p className="warning">
-          Onaylanmış bakiye yetersiz. Önce Rabby veya Phantom ile yatırım yapın.
+        Insufficient confirmed balance. Please deposit first using Rabby or Phantom.
         </p>
       )}
 
       {willAutoWait && (
         <p className="hint confirming-hint">
-          Bekleyen bakiye var — ödeme tıklandığında onay 1 sn aralıkla otomatik
-          beklenir.
+          Pending balance detected — confirmation is automatically awaited at 1s intervals when payment is clicked.
         </p>
       )}
 
@@ -93,12 +92,12 @@ export function CheckoutSection() {
         onClick={() => void payOnArc(selectedItem.price, merchantAddress)}
         disabled={!canPay || isLoading || isConfirming || !merchantAddress}
       >
-        Arc Testnet&apos;te öde — {selectedItem.price} USDC
+        Pay on Arc Testnet — {selectedItem.price} USDC
       </button>
 
       <hr style={{ marginTop: 20, marginBottom: 12 }} />
 
-      <label htmlFor="solana-recipient">Arc → Solana transferi (alıcı Phantom adresi)</label>
+      <label htmlFor="solana-recipient">Arc → Solana transfer (recipient Phantom address)</label>
       <input
         id="solana-recipient"
         type="text"
@@ -115,14 +114,14 @@ export function CheckoutSection() {
           setSolanaError('')
           const isBase58 = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(solanaRecipient)
           if (!isBase58) {
-            setSolanaError('Geçersiz Solana adresi — base58, ~44 karakter bekleniyor.')
+            setSolanaError('Invalid Solana address — base58 format, ~44 characters expected.')
             return
           }
           void transferArcToSolana(selectedItem.price, solanaRecipient)
         }}
         disabled={!evmAddress || !solanaAddress || isLoading || !solanaRecipient}
       >
-        Arc → Solana Devnet'e gönder — {selectedItem.price} USDC
+        Send Arc → Solana Devnet — {selectedItem.price} USDC
       </button>
 
       {solanaError && <p className="warning">{solanaError}</p>}
