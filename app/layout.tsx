@@ -1,3 +1,5 @@
+'use client'
+import { useEffect } from 'react'
 import type { Metadata } from 'next'
 import { Providers } from './providers'
 import './globals.css'
@@ -9,6 +11,12 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual'
+    }
+    window.scrollTo(0, 0)
+  }, [])
   return (
     <html lang="tr">
       <body>
