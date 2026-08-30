@@ -95,7 +95,7 @@ export function AgentChat() {
   return (
     <section className="panel agent-panel">
       <div className="panel-header">
-        <h2>🤖 AI Payment Agent</h2>
+        <h2>🤖 SwiftPayment Agent</h2>
         <p>Tell me what to pay and I&apos;ll handle it.</p>
       </div>
       <div className="agent-messages">
