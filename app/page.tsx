@@ -1,3 +1,4 @@
+'use client'
 import { BalanceSection, DepositSection } from '@/components/BalanceSection'
 import { CheckoutSection } from '@/components/CheckoutSection'
 import { StatusBanner } from '@/components/StatusBanner'
@@ -5,6 +6,10 @@ import { WalletSection } from '@/components/WalletSection'
 import { AgentChat } from '@/components/AgentChat'
 import { PaymentHistory } from '@/components/PaymentHistory'
 import { ARC_TESTNET } from '@/config/checkout'
+
+function scrollTo(id: string) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
 
 export default function HomePage() {
   return (
@@ -15,18 +20,18 @@ export default function HomePage() {
           <span className="sidebar-logo-text">SwiftPay</span>
         </div>
         <nav className="sidebar-nav">
-          <a href="/" className="sidebar-link active">
+          <button className="sidebar-link active" onClick={() => window.scrollTo({top:0,behavior:'smooth'})}>
             <span>🏠</span> Home
-          </a>
-          <a href="/" className="sidebar-link">
+          </button>
+          <button className="sidebar-link" onClick={() => scrollTo('send')}>
             <span>💸</span> Send
-          </a>
-          <a href="/" className="sidebar-link">
+          </button>
+          <button className="sidebar-link" onClick={() => scrollTo('agent')}>
             <span>🤖</span> Agent
-          </a>
-          <a href="/" className="sidebar-link">
+          </button>
+          <button className="sidebar-link" onClick={() => scrollTo('history')}>
             <span>📋</span> History
-          </a>
+          </button>
         </nav>
         <div className="sidebar-footer">
           <div className="sidebar-network">
@@ -73,11 +78,11 @@ export default function HomePage() {
             <WalletSection />
             <BalanceSection />
             <DepositSection />
-            <PaymentHistory />
+            <div id="history"><PaymentHistory /></div>
           </div>
           <div className="dashboard-col-right">
-            <CheckoutSection />
-            <AgentChat />
+            <div id="send"><CheckoutSection /></div>
+            <div id="agent"><AgentChat /></div>
           </div>
         </div>
 
