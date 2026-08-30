@@ -960,3 +960,15 @@ input::placeholder {
   white-space: normal;
   line-height: 1.3;
 }
+
+.deposit-card .wallet-card-top strong {
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deposit-card {
+  min-width: 0;
+  overflow: hidden;
+}
