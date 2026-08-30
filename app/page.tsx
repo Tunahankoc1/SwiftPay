@@ -3,7 +3,6 @@ import { CheckoutSection } from '@/components/CheckoutSection'
 import { StatusBanner } from '@/components/StatusBanner'
 import { WalletSection } from '@/components/WalletSection'
 import { AgentChat } from '@/components/AgentChat'
-import { Dashboard } from '@/components/Dashboard'
 import { ARC_TESTNET } from '@/config/checkout'
 
 export default function HomePage() {
