@@ -704,3 +704,247 @@ input::placeholder {
 .agent-input-row input {
   flex: 1;
 }
+
+/* ── Dashboard Layout ─────────────────────────────────────────── */
+
+.dashboard-root {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────── */
+
+.sidebar {
+  width: 220px;
+  min-height: 100vh;
+  background: rgba(6, 10, 26, 0.95);
+  border-right: 1px solid rgba(59, 130, 246, 0.12);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+  margin-bottom: 1rem;
+}
+
+.sidebar-logo-icon {
+  font-size: 1.4rem;
+}
+
+.sidebar-logo-text {
+  font-size: 1.2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #fff, #93c5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0 0.75rem;
+  flex: 1;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 10px;
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover {
+  background: rgba(59, 130, 246, 0.08);
+  color: #e2e8f0;
+}
+
+.sidebar-link.active {
+  background: rgba(59, 130, 246, 0.12);
+  color: #93c5fd;
+  font-weight: 600;
+}
+
+.sidebar-footer {
+  padding: 1rem 1.25rem 0;
+  border-top: 1px solid rgba(59, 130, 246, 0.1);
+  margin-top: auto;
+}
+
+.sidebar-network {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.network-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ── Main content ─────────────────────────────────────────────── */
+
+.dashboard-main {
+  margin-left: 220px;
+  flex: 1;
+  padding: 2rem 2rem 4rem;
+  max-width: calc(100vw - 220px);
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff, #93c5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 0.25rem;
+}
+
+.dashboard-subtitle {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ── Stats row ───────────────────────────────────────────────── */
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: rgba(10, 15, 30, 0.7);
+  border: 1px solid rgba(59, 130, 246, 0.12);
+  border-radius: 16px;
+  padding: 1.1rem 1.25rem;
+  backdrop-filter: blur(12px);
+  transition: border-color 0.2s;
+}
+
+.stat-card:hover {
+  border-color: rgba(59, 130, 246, 0.25);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+}
+
+.stat-value {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #e2e8f0;
+  margin-bottom: 0.2rem;
+}
+
+.stat-value.stat-green {
+  color: #10b981;
+}
+
+.stat-sub {
+  font-size: 0.75rem;
+  color: #475569;
+}
+
+/* ── Dashboard grid ──────────────────────────────────────────── */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.dashboard-col-left,
+.dashboard-col-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ── Dashboard footer ────────────────────────────────────────── */
+
+.dashboard-footer {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+  text-align: center;
+  color: #475569;
+  font-size: 0.8rem;
+}
+
+.dashboard-footer a {
+  color: #7dd3fc;
+}
+
+/* ── Override app max-width for dashboard ────────────────────── */
+
+.dashboard-root .app {
+  max-width: none;
+  padding: 0;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+  .dashboard-main {
+    margin-left: 0;
+    max-width: 100vw;
+    padding: 1rem;
+  }
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
