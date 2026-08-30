@@ -948,3 +948,15 @@ input::placeholder {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+.deposit-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.deposit-card .button {
+  font-size: 0.78rem;
+  padding: 0.5rem 0.6rem;
+  min-height: 38px;
+  white-space: normal;
+  line-height: 1.3;
+}
