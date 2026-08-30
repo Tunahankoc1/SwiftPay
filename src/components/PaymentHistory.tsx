@@ -14,9 +14,16 @@ type TxRecord = {
 export function PaymentHistory() {
   const [history, setHistory] = useState<TxRecord[]>([])
 
-  useEffect(() => {
+  function loadHistory() {
     const saved = localStorage.getItem('swiftpay_history')
     if (saved) setHistory(JSON.parse(saved))
+    else setHistory([])
+  }
+
+  useEffect(() => {
+    loadHistory()
+    const interval = setInterval(loadHistory, 2000)
+    return () => clearInterval(interval)
   }, [])
 
   if (history.length === 0) {
