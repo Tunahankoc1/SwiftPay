@@ -973,3 +973,11 @@ input::placeholder {
 .deposit-card .wallet-card-top strong {
   font-size: 0.82rem;
 }
+
+html {
+  scroll-behavior: auto;
+}
+
+.dashboard-main {
+  overflow-anchor: none;
+}
