@@ -1,13 +1,20 @@
 'use client'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { useState, type ReactNode } from 'react'
+import { useState, useEffect, type ReactNode } from 'react'
 import { WagmiProvider } from 'wagmi'
 import { WalletProvider } from '@/context/WalletContext'
 import { wagmiConfig } from '@/lib/wagmi'
 
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient())
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual'
+    }
+  }, [])
 
   return (
     <WagmiProvider config={wagmiConfig}>
