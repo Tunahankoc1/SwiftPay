@@ -981,3 +981,10 @@ html {
 .dashboard-main {
   overflow-anchor: none;
 }
+
+.sidebar-link {
+  background: transparent;
+  border: none;
+  text-align: left;
+  width: 100%;
+}
