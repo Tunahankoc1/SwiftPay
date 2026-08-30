@@ -86,6 +86,17 @@ export function AgentChat() {
         params: [{ from: accounts[0], to: USDC, value: '0x0', data: '0xa9059cbb' + to + amtHex, chainId: ARC }]
       })
       setTxStatus(null)
+      // Save to history
+      const history = JSON.parse(localStorage.getItem('swiftpay_history') || '[]')
+      history.unshift({
+        id: Date.now().toString(),
+        to: action.to,
+        amount: action.amount,
+        txHash,
+        timestamp: new Date().toISOString(),
+        status: 'success'
+      })
+      localStorage.setItem('swiftpay_history', JSON.stringify(history))
       setMessages(prev => [...prev, { role: 'agent', content: `✅ Sent ${action.amount} USDC! TX: ${txHash.slice(0, 16)}...` }])
     } catch (e: any) {
       setTxStatus(e.code === 4001 ? 'Rejected.' : 'Error: ' + e.message)
