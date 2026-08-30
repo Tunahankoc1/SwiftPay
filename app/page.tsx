@@ -18,13 +18,13 @@ export default function HomePage() {
           <a href="/" className="sidebar-link active">
             <span>🏠</span> Home
           </a>
-          <a href="/#send" className="sidebar-link">
+          <a href="/" className="sidebar-link">
             <span>💸</span> Send
           </a>
-          <a href="/#agent" className="sidebar-link">
+          <a href="/" className="sidebar-link">
             <span>🤖</span> Agent
           </a>
-          <a href="/#history" className="sidebar-link">
+          <a href="/" className="sidebar-link">
             <span>📋</span> History
           </a>
         </nav>
