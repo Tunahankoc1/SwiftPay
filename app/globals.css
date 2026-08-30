@@ -961,31 +961,11 @@ input::placeholder {
   line-height: 1.3;
 }
 
-.deposit-card .wallet-card-top strong {
-  font-size: 0.8rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
 .deposit-card {
   min-width: 0;
   overflow: hidden;
 }
 
-.deposit-card .wallet-card-top strong {
-  font-size: 0.75rem !important;
-  white-space: nowrap;
-  overflow: visible;
-  text-overflow: unset;
-}
 
-.deposit-card .badge {
-  font-size: 0.6rem;
-  padding: 0.15rem 0.4rem;
-}
 
-.deposit-card .wallet-card-top {
-  gap: 0.3rem;
-  flex-wrap: nowrap;
-}
