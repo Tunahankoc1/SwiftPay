@@ -14,7 +14,7 @@ type Message = {
 
 export function AgentChat() {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'agent', content: 'Hi! I\'m your SwiftPay AI agent. I can help you send USDC payments on Arc Testnet. Try: "Send 5 USDC to 0x..."' }
+    { role: 'agent', content: "Hi! I'm your SwiftPay AI agent. I can help you send USDC payments on Arc Testnet. Try: \"Send 5 USDC to 0x...\"" }
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -34,70 +34,53 @@ export function AgentChat() {
     setLoading(true)
 
     try {
-      const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=' + process.env.NEXT_PUBLIC_GEMINI_API_KEY, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: `You are a SwiftPay AI agent for Arc Testnet USDC payments. 
-              
+      const res = await fetch(
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=' + process.env.NEXT_PUBLIC_GEMINI_API_KEY,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: `You are a SwiftPay AI agent for Arc Testnet USDC payments.
 The user said: "${userMsg}"
-
-If the user wants to send USDC, extract:
-- amount (number)
-- to address (0x... Ethereum address)
-
-Respond in JSON format only:
-{
-  "message": "your friendly response",
-  "action": {
-    "type": "payment",
-    "amount": "10",
-    "to": "0x..."
-  }
-}
-
-If no payment intent, respond:
-{
-  "message": "your helpful response",
-  "action": null
-}
-
-Rules:
-- Only Arc Testnet USDC payments
-- Amount must be positive number
-- Address must start with 0x and be 42 chars
-- Be concise and friendly`
-            }]
-          }],
-          generationConfig: { temperature: 0.1, maxOutputTokens: 500 }
-        })
-      })
+If the user wants to send USDC, extract amount and address.
+Respond ONLY with valid JSON, no markdown, no backticks:
+{"message":"your response","action":{"type":"payment","amount":"10","to":"0x..."}}
+If no payment intent:
+{"message":"your response","action":null}`
+              }]
+            }],
+            generationConfig: { temperature: 0.1, maxOutputTokens: 300 }
+          })
+        }
+      )
 
       const data = await res.json()
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text || ''
-      const clean = text.replace(/```json|```/g, '').trim()
-      const parsed = JSON.parse(clean)
+      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || ''
+      
+      let parsed: { message: string; action: { type: string; amount: string; to: string } | null }
+      try {
+        const clean = text.replace(/```json|```/g, '').trim()
+        parsed = JSON.parse(clean)
+      } catch {
+        parsed = { message: text || 'Sorry, I had trouble understanding that.', action: null }
+      }
 
-      const agentMsg: Message = {
+      setMessages(prev => [...prev, {
         role: 'agent',
         content: parsed.message,
-        action: parsed.action || undefined
-      }
-      setMessages(prev => [...prev, agentMsg])
-    } catch (e) {
-      setMessages(prev => [...prev, { role: 'agent', content: 'Sorry, I had trouble understanding that. Please try again.' }])
+        action: parsed.action ? { type: 'payment', amount: parsed.action.amount, to: parsed.action.to } : undefined
+      }])
+    } catch {
+      setMessages(prev => [...prev, { role: 'agent', content: 'Connection error. Please try again.' }])
     } finally {
       setLoading(false)
     }
   }
 
   async function executePayment(action: { type: string; amount: string; to: string }) {
-    if (!evmAddress) {
-      setTxStatus('Please connect your Rabby wallet first.')
-      return
-    }
+    if (!evmAddress) { setTxStatus('Please connect your Rabby wallet first.'); return }
     const eth = (window as any).ethereum
     if (!eth) { setTxStatus('No wallet found!'); return }
 
@@ -110,11 +93,11 @@ Rules:
       const amountInUnits = BigInt(Math.round(parseFloat(action.amount) * 1e6))
       const paddedTo = action.to.slice(2).padStart(64, '0')
       const paddedAmount = amountInUnits.toString(16).padStart(64, '0')
-      const data = '0xa9059cbb' + paddedTo + paddedAmount
+      const txData = '0xa9059cbb' + paddedTo + paddedAmount
 
       const txHash = await eth.request({
         method: 'eth_sendTransaction',
-        params: [{ from, to: USDC_ADDRESS, value: '0x0', data, chainId: ARC_CHAIN_ID }]
+        params: [{ from, to: USDC_ADDRESS, value: '0x0', data: txData, chainId: ARC_CHAIN_ID }]
       })
 
       setTxStatus('✅ Payment sent!')
@@ -123,8 +106,7 @@ Rules:
         content: `Payment successful! Sent ${action.amount} USDC. TX: ${txHash.slice(0, 16)}...`
       }])
     } catch (e: any) {
-      if (e.code === 4001) setTxStatus('Transaction rejected.')
-      else setTxStatus('Error: ' + e.message)
+      setTxStatus(e.code === 4001 ? 'Transaction rejected.' : 'Error: ' + e.message)
     }
   }
 
@@ -145,10 +127,7 @@ Rules:
                   <span className="agent-action-amount">{msg.action.amount} USDC</span>
                   <span className="agent-action-to">→ {msg.action.to.slice(0, 8)}...{msg.action.to.slice(-6)}</span>
                 </div>
-                <button
-                  className="button primary agent-execute-btn"
-                  onClick={() => executePayment(msg.action!)}
-                >
+                <button className="button primary agent-execute-btn" onClick={() => executePayment(msg.action!)}>
                   Send Now
                 </button>
               </div>
@@ -174,11 +153,7 @@ Rules:
           placeholder='Try: "Send 5 USDC to 0x..."'
           disabled={loading}
         />
-        <button
-          className="button primary"
-          onClick={sendMessage}
-          disabled={loading || !input.trim()}
-        >
+        <button className="button primary" onClick={sendMessage} disabled={loading || !input.trim()}>
           Send
         </button>
       </div>
