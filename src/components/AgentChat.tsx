@@ -45,7 +45,7 @@ export function AgentChat() {
                 text: `You are a SwiftPay AI agent for Arc Testnet USDC payments.
 The user said: "${userMsg}"
 If the user wants to send USDC, extract amount and address.
-Respond ONLY with valid JSON, no markdown, no backticks:
+Respond ONLY with this exact JSON format, nothing else, no explanation, no markdown:
 {"message":"your response","action":{"type":"payment","amount":"10","to":"0x..."}}
 If no payment intent:
 {"message":"your response","action":null}`
