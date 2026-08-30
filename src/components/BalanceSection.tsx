@@ -138,7 +138,7 @@ export function DepositSection() {
                 onClick={() => void deposit(chainId, amounts[chainId])}
                 disabled={disabled}
               >
-                Deposit and await confirmation
+                Deposit
               </button>
             </div>
           )
