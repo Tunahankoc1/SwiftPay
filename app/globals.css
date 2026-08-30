@@ -969,3 +969,7 @@ input::placeholder {
 
 
 
+
+.deposit-card .wallet-card-top strong {
+  font-size: 0.82rem;
+}
