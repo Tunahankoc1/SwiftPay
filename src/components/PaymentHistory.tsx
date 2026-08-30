@@ -41,17 +41,7 @@ export function PaymentHistory() {
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         {history.map((tx) => (
-          <div key={tx.id} style={{
-            padding: '1rem',
-            borderRadius: '12px',
-            background: 'rgba(2, 6, 23, 0.6)',
-            border: '1px solid rgba(148, 163, 184, 0.1)',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            gap: '1rem',
-            flexWrap: 'wrap'
-          }}>
+          <div key={tx.id} style={{ padding: '1rem', borderRadius: '12px', background: 'rgba(2,6,23,0.6)', border: '1px solid rgba(148,163,184,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
             <div>
               <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.25rem' }}>
                 {new Date(tx.timestamp).toLocaleString()}
@@ -60,12 +50,7 @@ export function PaymentHistory() {
                 To: {tx.to.slice(0, 8)}...{tx.to.slice(-6)}
               </div>
               {tx.txHash && (
-                
-                  href={`${ARC_TESTNET.explorerUrl}/tx/${tx.txHash}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ fontSize: '0.75rem', color: '#7dd3fc' }}
-                >
+                <a href={ARC_TESTNET.explorerUrl + '/tx/' + tx.txHash} target="_blank" rel="noreferrer" style={{ fontSize: '0.75rem', color: '#7dd3fc' }}>
                   View on Explorer ↗
                 </a>
               )}
@@ -74,16 +59,7 @@ export function PaymentHistory() {
               <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#38bdf8' }}>
                 {tx.amount} USDC
               </div>
-              <div style={{
-                fontSize: '0.7rem',
-                fontWeight: 700,
-                padding: '2px 8px',
-                borderRadius: '99px',
-                background: tx.status === 'success' ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)',
-                color: tx.status === 'success' ? '#10b981' : '#f59e0b',
-                display: 'inline-block',
-                marginTop: '0.25rem'
-              }}>
+              <div style={{ fontSize: '0.7rem', fontWeight: 700, padding: '2px 8px', borderRadius: '99px', background: tx.status === 'success' ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)', color: tx.status === 'success' ? '#10b981' : '#f59e0b', display: 'inline-block', marginTop: '0.25rem' }}>
                 {tx.status === 'success' ? '✓ Success' : '⏳ Pending'}
               </div>
             </div>
