@@ -15,16 +15,16 @@ export default function HomePage() {
           <span className="sidebar-logo-text">SwiftPay</span>
         </div>
         <nav className="sidebar-nav">
-          <a href="#home" className="sidebar-link active">
+          <a href="/" className="sidebar-link active">
             <span>🏠</span> Home
           </a>
-          <a href="#send" className="sidebar-link">
+          <a href="/#send" className="sidebar-link">
             <span>💸</span> Send
           </a>
-          <a href="#agent" className="sidebar-link">
+          <a href="/#agent" className="sidebar-link">
             <span>🤖</span> Agent
           </a>
-          <a href="#history" className="sidebar-link">
+          <a href="/#history" className="sidebar-link">
             <span>📋</span> History
           </a>
         </nav>
@@ -70,7 +70,7 @@ export default function HomePage() {
 
         <div className="dashboard-grid">
           <div className="dashboard-col-left">
-            <div id="home"><WalletSection /></div>
+            <WalletSection />
             <BalanceSection />
             <DepositSection />
             <div id="history"><PaymentHistory /></div>
