@@ -3,6 +3,7 @@ import { CheckoutSection } from '@/components/CheckoutSection'
 import { StatusBanner } from '@/components/StatusBanner'
 import { WalletSection } from '@/components/WalletSection'
 import { AgentChat } from '@/components/AgentChat'
+import { PaymentHistory } from '@/components/PaymentHistory'
 import { ARC_TESTNET } from '@/config/checkout'
 
 export default function HomePage() {
@@ -67,11 +68,12 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="dashboard-grid" id="home">
+        <div className="dashboard-grid">
           <div className="dashboard-col-left">
-            <div id="home-section"><WalletSection /></div>
-            <div id="send-section"><BalanceSection /></div>
+            <div id="home"><WalletSection /></div>
+            <BalanceSection />
             <DepositSection />
+            <div id="history"><PaymentHistory /></div>
           </div>
           <div className="dashboard-col-right">
             <div id="send"><CheckoutSection /></div>
