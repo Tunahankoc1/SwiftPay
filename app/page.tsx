@@ -73,11 +73,11 @@ export default function HomePage() {
             <WalletSection />
             <BalanceSection />
             <DepositSection />
-            <div id="history"><PaymentHistory /></div>
+            <PaymentHistory />
           </div>
           <div className="dashboard-col-right">
-            <div id="send"><CheckoutSection /></div>
-            <div id="agent"><AgentChat /></div>
+            <CheckoutSection />
+            <AgentChat />
           </div>
         </div>
 
