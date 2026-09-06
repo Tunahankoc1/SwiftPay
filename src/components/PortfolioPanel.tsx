@@ -1,38 +1,29 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useWallet } from '@/context/WalletContext'
+import { createPublicClient, http, parseAbi } from 'viem'
+import { sepolia, baseSepolia } from 'viem/chains'
 
-type ChainBalance = {
-  chain: string
-  balance: string
-  color: string
-  rpc: string
-  usdcAddress: string
+const arcTestnet = {
+  id: 5042002,
+  name: 'Arc Testnet',
+  nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 },
+  rpcUrls: { default: { http: ['https://rpc.testnet.arc.network'] } },
 }
 
-const CHAINS: ChainBalance[] = [
-  { chain: 'Ethereum Sepolia', balance: '0', color: '#627EEA', rpc: 'https://rpc.sepolia.org', usdcAddress: '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238' },
-  { chain: 'Base Sepolia', balance: '0', color: '#0052FF', rpc: 'https://sepolia.base.org', usdcAddress: '0x036CbD53842c5426634e7929541eC2318f3dCF7e' },
-  { chain: 'Arc Testnet', balance: '0', color: '#10B981', rpc: 'https://rpc.testnet.arc.network', usdcAddress: '0x3600000000000000000000000000000000000000' },
+const USDC_ABI = parseAbi(['function balanceOf(address) view returns (uint256)'])
+
+const CHAINS = [
+  { chain: sepolia, name: 'Ethereum Sepolia', color: '#627EEA', usdcAddress: '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238' as `0x${string}` },
+  { chain: baseSepolia, name: 'Base Sepolia', color: '#0052FF', usdcAddress: '0x036CbD53842c5426634e7929541eC2318f3dCF7e' as `0x${string}` },
+  { chain: arcTestnet as any, name: 'Arc Testnet', color: '#10B981', usdcAddress: '0x3600000000000000000000000000000000000000' as `0x${string}` },
 ]
-
-async function getUSDCBalance(rpc: string, usdcAddress: string, walletAddress: string): Promise<string> {
-  try {
-    const paddedAddress = '0x' + '0'.repeat(24) + walletAddress.slice(2)
-    const res = await fetch(rpc, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ jsonrpc: '2.0', method: 'eth_call', id: 1, params: [{ to: usdcAddress, data: '0x70a08231' + paddedAddress }, 'latest'] })
-    })
-    const data = await res.json()
-    if (data.result && data.result !== '0x') return (parseInt(data.result, 16) / 1e6).toFixed(2)
-    return '0.00'
-  } catch { return '—' }
-}
 
 export function PortfolioPanel() {
   const { evmAddress, solanaAddress } = useWallet()
-  const [balances, setBalances] = useState<ChainBalance[]>(CHAINS)
+  const [balances, setBalances] = useState<{ name: string; color: string; balance: string }[]>(
+    CHAINS.map(c => ({ name: c.name, color: c.color, balance: '—' }))
+  )
   const [loading, setLoading] = useState(false)
   const [lastUpdated, setLastUpdated] = useState<string | null>(null)
 
@@ -40,13 +31,33 @@ export function PortfolioPanel() {
     if (!evmAddress) return
     setLoading(true)
     try {
-      const updated = await Promise.all(CHAINS.map(async (chain) => ({ ...chain, balance: await getUSDCBalance(chain.rpc, chain.usdcAddress, evmAddress) })))
-      setBalances(updated)
+      const results = await Promise.all(
+        CHAINS.map(async ({ chain, usdcAddress, name, color }) => {
+          try {
+            const client = createPublicClient({ chain: chain as any, transport: http() })
+            const raw = await client.readContract({
+              address: usdcAddress,
+              abi: USDC_ABI,
+              functionName: 'balanceOf',
+              args: [evmAddress as `0x${string}`],
+            })
+            const balance = (Number(raw) / 1e6).toFixed(2)
+            return { name, color, balance }
+          } catch {
+            return { name, color, balance: '—' }
+          }
+        })
+      )
+      setBalances(results)
       setLastUpdated(new Date().toLocaleTimeString())
-    } finally { setLoading(false) }
+    } finally {
+      setLoading(false)
+    }
   }
 
-  useEffect(() => { if (evmAddress) fetchBalances() }, [evmAddress])
+  useEffect(() => {
+    if (evmAddress) fetchBalances()
+  }, [evmAddress])
 
   const total = balances.reduce((sum, c) => sum + (parseFloat(c.balance) || 0), 0)
 
@@ -63,6 +74,7 @@ export function PortfolioPanel() {
           </button>
         )}
       </div>
+
       {evmAddress ? (
         <>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem' }}>
@@ -70,11 +82,11 @@ export function PortfolioPanel() {
               const bal = parseFloat(chain.balance) || 0
               const pct = total > 0 ? (bal / total) * 100 : 0
               return (
-                <div key={chain.chain} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <div key={chain.name} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                   <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: chain.color, flexShrink: 0 }} />
                   <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                      <span style={{ fontSize: '0.85rem', color: '#e2e8f0' }}>{chain.chain}</span>
+                      <span style={{ fontSize: '0.85rem', color: '#e2e8f0' }}>{chain.name}</span>
                       <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#38bdf8' }}>{chain.balance} USDC</span>
                     </div>
                     <div style={{ height: '4px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
@@ -96,6 +108,7 @@ export function PortfolioPanel() {
               </div>
             )}
           </div>
+
           <div style={{ padding: '1rem', background: 'rgba(56,189,248,0.08)', border: '1px solid rgba(56,189,248,0.2)', borderRadius: '12px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ fontSize: '0.9rem', color: '#94a3b8', fontWeight: 600 }}>Total USDC</span>
@@ -105,7 +118,9 @@ export function PortfolioPanel() {
           </div>
         </>
       ) : (
-        <div style={{ textAlign: 'center', padding: '2rem', color: '#475569' }}>Connect your Rabby wallet to see your multi-chain USDC portfolio.</div>
+        <div style={{ textAlign: 'center', padding: '2rem', color: '#475569' }}>
+          Connect your Rabby wallet to see your multi-chain USDC portfolio.
+        </div>
       )}
     </section>
   )
