@@ -5,6 +5,7 @@ import { StatusBanner } from '@/components/StatusBanner'
 import { WalletSection } from '@/components/WalletSection'
 import { AgentChat } from '@/components/AgentChat'
 import { PaymentHistory } from '@/components/PaymentHistory'
+import { PortfolioPanel } from '@/components/PortfolioPanel'
 import { ARC_TESTNET } from '@/config/checkout'
 
 function scrollTo(id: string) {
@@ -81,6 +82,7 @@ export default function HomePage() {
             <div id="history"><PaymentHistory /></div>
           </div>
           <div className="dashboard-col-right">
+            <PortfolioPanel />
             <div id="send"><CheckoutSection /></div>
             <div id="agent"><AgentChat /></div>
           </div>
