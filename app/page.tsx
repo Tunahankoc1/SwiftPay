@@ -6,6 +6,7 @@ import { WalletSection } from '@/components/WalletSection'
 import { AgentChat } from '@/components/AgentChat'
 import { PaymentHistory } from '@/components/PaymentHistory'
 import { PortfolioPanel } from '@/components/PortfolioPanel'
+import { NetworkStatus } from '@/components/NetworkStatus'
 import { ARC_TESTNET } from '@/config/checkout'
 
 function scrollTo(id: string) {
@@ -50,6 +51,8 @@ export default function HomePage() {
           </div>
           <StatusBanner />
         </header>
+
+        <NetworkStatus />
 
         <div className="stats-row">
           <div className="stat-card">
