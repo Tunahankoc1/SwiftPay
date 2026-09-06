@@ -13,6 +13,7 @@
     "@circle-fin/adapter-solana": "^1.6.1",
     "@circle-fin/adapter-viem-v2": "^1.12.1",
     "@circle-fin/app-kit": "^1.8.1",
+    "@solana/spl-token": "^0.4.15",
     "@tanstack/react-query": "^5.90.2",
     "next": "^15.5.4",
     "react": "^19.2.7",
