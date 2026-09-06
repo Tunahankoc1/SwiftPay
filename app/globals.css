@@ -988,3 +988,37 @@ html {
   text-align: left;
   width: 100%;
 }
+
+.network-status-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem;
+  background: rgba(10, 15, 30, 0.6);
+  border: 1px solid rgba(59, 130, 246, 0.12);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+}
+
+.network-stat-label {
+  font-size: 0.7rem;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3rem;
+}
+
+.network-stat-value {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  font-family: ui-monospace, monospace;
+}
+
+@media (max-width: 768px) {
+  .network-status-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
