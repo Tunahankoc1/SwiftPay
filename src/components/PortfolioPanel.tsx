@@ -20,7 +20,7 @@ const EVM_CHAINS = [
   { chain: arcTestnet as any, name: 'Arc Testnet', color: '#10B981', usdcAddress: '0x3600000000000000000000000000000000000000' as `0x${string}` },
 ]
 
-const SOLANA_USDC_DEVNET = 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr'
+const SOLANA_USDC_DEVNET = '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU'
 
 async function getSolanaUSDCBalance(walletAddress: string): Promise<string> {
   try {
